@@ -2,7 +2,7 @@
 
 Sistem informasi etalase editorial dan konsol manajemen untuk showroom iPhone terkurasi. Dibangun dengan Laravel 12, MySQL/PostgreSQL, dan antarmuka monokrom editorial.
 
-**Demo publik (URL permanen):** https://hs-iphone-production.up.railway.app
+**Demo publik (URL permanen):** https://hs-iphone.loca.lt
 
 ## Fitur utama
 
@@ -33,19 +33,27 @@ php artisan migrate --seed
 php artisan serve
 ```
 
-## Deploy ke Railway (URL permanen)
+## Akses publik permanen
 
-Repository ini menyertakan `Dockerfile` dan `docker/entrypoint.sh` sehingga Railway dapat langsung membangun dan menjalankan aplikasi.
+Aplikasi saat ini dipublikasikan di:
 
-Langkah paling singkat:
+**https://hs-iphone.loca.lt**
 
-1. Buat project Railway baru, lalu pilih **Deploy from GitHub repo** dan pilih `fadafarada30-jpg/hs-iphone`.
-2. Klik **Generate Domain** pada service `hs-iphone`.
-3. Selesai. Aplikasi memakai SQLite otomatis, menjalankan migrasi + seeding saat database masih kosong, dan URL aplikasi terdeteksi dari host request. Tidak perlu menambahkan `DATABASE_URL`, `DB_CONNECTION`, atau `APP_URL`.
+Subdomain `hs-iphone` tetap, jadi tautannya tidak berubah setiap kali tunnel dijalankan ulang.
 
-Jika ingin memakai PostgreSQL eksternal (opsional), tambahkan variabel `DATABASE_URL` dengan connection string-nya. Entrypoint akan otomatis memakai driver `pgsql`; variabel lama seperti `DB_HOST` tidak diperlukan.
+Di Windows, script `scripts/watch-public.ps1` bertugas menjaga MySQL, Laravel, dan tunnel tetap hidup. Script ini didaftarkan sebagai scheduled task `HS-iPhone Public Watchdog` yang berjalan saat login. Script `scripts/start-tunnel.cmd` dipakai untuk menjalankan localtunnel dengan subdomain tetap.
 
-Entrypoint juga menyesuaikan Apache dengan env `PORT` yang diberikan Railway.
+Jika komputer dimatikan atau internet putus, alamat tetap sama; begitu penjaga berjalan kembali, tunnel akan tersambung kembali ke subdomain yang sama.
+
+## Deploy ke Railway (opsional)
+
+Repository ini juga menyertakan `Dockerfile`, `render.yaml`, dan `docker/entrypoint.sh` untuk deploy ke platform container.
+
+- Entrypoint otomatis memakai `DATABASE_URL` bila tersedia, atau SQLite bila tidak ada.
+- Apache menyesuaikan port dari env `PORT`.
+- URL aplikasi terdeteksi dari host request, jadi tidak perlu men-set `APP_URL`.
+
+Healthcheck: `/health`.
 
 ## Pengujian
 
