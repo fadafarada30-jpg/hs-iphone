@@ -2,6 +2,8 @@
 
 Sistem informasi etalase editorial dan konsol manajemen untuk showroom iPhone terkurasi. Dibangun dengan Laravel 12, MySQL/PostgreSQL, dan antarmuka monokrom editorial.
 
+**Demo publik (URL permanen):** https://hs-iphone-production.up.railway.app
+
 ## Fitur utama
 
 - Etalase publik dengan filter seri, kapasitas, warna, dan grade kondisi.
@@ -31,20 +33,26 @@ php artisan migrate --seed
 php artisan serve
 ```
 
-## Deploy ke Render ( gratis, URL permanen )
+## Deploy ke Railway (URL permanen)
 
-Repository ini sudah menyertakan `Dockerfile`, `render.yaml`, dan entrypoint otomatis yang menjalankan migrasi serta seeding saat database masih kosong.
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/fadafarada30-jpg/hs-iphone)
+Repository ini menyertakan `Dockerfile` dan `docker/entrypoint.sh` sehingga Railway dapat langsung membangun dan menjalankan aplikasi.
 
 Langkah:
 
-1. Klik tombol **Deploy to Render** di atas dan login dengan akun GitHub/Render Anda.
-2. Render akan mendeteksi `render.yaml`, membuat web service `hs-iphone` dan database PostgreSQL `hs-iphone-db`.
-3. Setelah selesai, buka URL yang diberikan Render, biasanya `https://hs-iphone.onrender.com`.
-4. Jika nama service berubah, perbarui environment variable `APP_URL` di dashboard Render dengan URL aktual.
+1. Buat project Railway baru, lalu pilih **Deploy from GitHub repo** dan pilih `fadafarada30-jpg/hs-iphone`.
+2. Tambahkan layanan PostgreSQL di project yang sama.
+3. Di service `hs-iphone`, buka tab **Variables** dan isi:
+   - `APP_NAME` = `HS-iPhone`
+   - `APP_ENV` = `production`
+   - `APP_KEY` = `base64:TVwbPazj9WjBFuUSe89XJmX69JfLr7gPcRU6tFMNgPU=`
+   - `APP_DEBUG` = `false`
+   - `APP_URL` = `https://hs-iphone-production.up.railway.app`
+   - `DB_CONNECTION` = `pgsql`
+   - `DATABASE_URL` = connection string PostgreSQL dari Railway/Neon
+4. Buka tab **Settings**, pastikan healthcheck path = `/health`, lalu klik **Generate Domain**.
+5. Railway akan menjalankan `migrate` dan seeding otomatis saat database masih kosong.
 
-Catatan: paket gratis Render akan menghentikan web service setelah approximately 15 menit tanpa aktivitas, sehingga request pertama setelah itu membutuhkan beberapa detik untuk bangun. Alamat URL-nya tetap sama.
+Entrypoint otomatis menyesuaikan Apache dengan env `PORT` yang diberikan Railway dan menerjemahkan `DATABASE_URL` ke `DB_URL` yang dipakai Laravel.
 
 ## Pengujian
 
