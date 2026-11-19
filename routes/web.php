@@ -18,6 +18,8 @@ use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Public ──────────────────────────────────────────────────────────────────
+Route::get('/health', fn () => response('ok', 200))->name('health');
+
 // Driver accounts are kept out of the storefront so they can focus on COD.
 Route::middleware('driver.guest')->group(function () {
 Route::get('/', HomeController::class)->name('home');

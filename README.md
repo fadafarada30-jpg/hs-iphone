@@ -1,58 +1,55 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# HS-iPhone
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem informasi etalase editorial dan konsol manajemen untuk showroom iPhone terkurasi. Dibangun dengan Laravel 12, MySQL/PostgreSQL, dan antarmuka monokrom editorial.
 
-## About Laravel
+## Fitur utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Etalase publik dengan filter seri, kapasitas, warna, dan grade kondisi.
+- Halaman detail produk dengan spesifikasi lengkap dan status garansi.
+- Keranjang, wishlist, checkout, COD, dan store pickup.
+- Chat realtime berbasis polling dengan indikator mengetik dan sinkronisasi WIB.
+- Konsol admin untuk produk, pesanan, pengajuan jual, bukti sold, dan pengguna.
+- Ruang kerja driver COD terpisah di `/driver`.
+- Desain responsif dengan gaya editorial monokrom.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Akun demo
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Role | Email | Password |
+|---|---|---|
+| Pembeli | `budi@demo.com` | `password` |
+| Admin | `admin@demo.com` | `password` |
+| Driver COD | `driver@demo.com` | `password` |
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Menjalankan secara lokal
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+npm install && npm run build
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Deploy ke Render ( gratis, URL permanen )
 
-## Contributing
+Repository ini sudah menyertakan `Dockerfile`, `render.yaml`, dan entrypoint otomatis yang menjalankan migrasi serta seeding saat database masih kosong.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/fadafarada30-jpg/hs-iphone)
 
-## Code of Conduct
+Langkah:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Klik tombol **Deploy to Render** di atas dan login dengan akun GitHub/Render Anda.
+2. Render akan mendeteksi `render.yaml`, membuat web service `hs-iphone` dan database PostgreSQL `hs-iphone-db`.
+3. Setelah selesai, buka URL yang diberikan Render, biasanya `https://hs-iphone.onrender.com`.
+4. Jika nama service berubah, perbarui environment variable `APP_URL` di dashboard Render dengan URL aktual.
 
-## Security Vulnerabilities
+Catatan: paket gratis Render akan menghentikan web service setelah approximately 15 menit tanpa aktivitas, sehingga request pertama setelah itu membutuhkan beberapa detik untuk bangun. Alamat URL-nya tetap sama.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Pengujian
 
-## License
+```bash
+php artisan test
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Hasil terakhir: **43 test passed, 190 assertions**.
