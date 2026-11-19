@@ -11,10 +11,28 @@ if [ "$PORT" != "80" ]; then
     sed -ri "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-available/*.conf
 fi
 
-# Railway/Neon menyediakan DATABASE_URL, sementara Laravel membaca DB_URL.
-if [ -z "$DB_URL" ] && [ -n "$DATABASE_URL" ]; then
-    export DB_URL="$DATABASE_URL"
-    export DB_CONNECTION="${DB_CONNECTION:-pgsql}"
+# Pakai database eksternal bila DATABASE_URL tersedia.
+# Jika tidak ada, pakai SQLite agar deploy tetap jalan tanpa variabel tambahan.
+if [ -n "$DATABASE_URL" ]; then
+    case "$DATABASE_URL" in
+        postgres://*|postgresql://*)
+            export DB_URL="$DATABASE_URL"
+            export DB_CONNECTION=pgsql
+            ;;
+        *)
+            unset DATABASE_URL DB_URL
+            export DB_CONNECTION=sqlite
+            export DB_DATABASE=/var/www/html/database/database.sqlite
+            mkdir -p /var/www/html/database
+            touch /var/www/html/database/database.sqlite
+            ;;
+    esac
+else
+    unset DB_URL
+    export DB_CONNECTION=sqlite
+    export DB_DATABASE=/var/www/html/database/database.sqlite
+    mkdir -p /var/www/html/database
+    touch /var/www/html/database/database.sqlite
 fi
 
 php artisan migrate --force

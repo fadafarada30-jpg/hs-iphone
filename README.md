@@ -37,22 +37,15 @@ php artisan serve
 
 Repository ini menyertakan `Dockerfile` dan `docker/entrypoint.sh` sehingga Railway dapat langsung membangun dan menjalankan aplikasi.
 
-Langkah:
+Langkah paling singkat:
 
 1. Buat project Railway baru, lalu pilih **Deploy from GitHub repo** dan pilih `fadafarada30-jpg/hs-iphone`.
-2. Tambahkan layanan PostgreSQL di project yang sama.
-3. Di service `hs-iphone`, buka tab **Variables** dan isi:
-   - `APP_NAME` = `HS-iPhone`
-   - `APP_ENV` = `production`
-   - `APP_KEY` = `base64:TVwbPazj9WjBFuUSe89XJmX69JfLr7gPcRU6tFMNgPU=`
-   - `APP_DEBUG` = `false`
-   - `APP_URL` = `https://hs-iphone-production.up.railway.app`
-   - `DB_CONNECTION` = `pgsql`
-   - `DATABASE_URL` = connection string PostgreSQL dari Railway/Neon
-4. Buka tab **Settings**, pastikan healthcheck path = `/health`, lalu klik **Generate Domain**.
-5. Railway akan menjalankan `migrate` dan seeding otomatis saat database masih kosong.
+2. Klik **Generate Domain** pada service `hs-iphone`.
+3. Selesai. Aplikasi memakai SQLite otomatis, menjalankan migrasi + seeding saat database masih kosong, dan URL aplikasi terdeteksi dari host request. Tidak perlu menambahkan `DATABASE_URL`, `DB_CONNECTION`, atau `APP_URL`.
 
-Entrypoint otomatis menyesuaikan Apache dengan env `PORT` yang diberikan Railway dan menerjemahkan `DATABASE_URL` ke `DB_URL` yang dipakai Laravel.
+Jika ingin memakai PostgreSQL eksternal (opsional), tambahkan variabel `DATABASE_URL` dengan connection string-nya. Entrypoint akan otomatis memakai driver `pgsql`; variabel lama seperti `DB_HOST` tidak diperlukan.
+
+Entrypoint juga menyesuaikan Apache dengan env `PORT` yang diberikan Railway.
 
 ## Pengujian
 
