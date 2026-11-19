@@ -5,8 +5,14 @@ $php          = 'C:\laragon\bin\php\php-8.3.36-Win32-vs16-x64\php.exe'
 $mysqld       = 'C:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysqld.exe'
 $myini        = 'C:\laragon\bin\mysql\mysql-8.4.3-winx64\my.ini'
 $tunnelScript = "$root\scripts\start-tunnel.cmd"
+$log          = "$root\scripts\watch-public.log"
 $public       = 'https://hs-iphone.loca.lt/health'
 $lastTunnel   = (Get-Date).AddMinutes(-5)
+
+function Write-Log {
+    param([string]$Message)
+    Add-Content -Path $log -Value ((Get-Date).ToString('yyyy-MM-dd HH:mm:ss') + ' ' + $Message)
+}
 
 function Test-TcpPort {
     param([int]$Port)
@@ -21,22 +27,30 @@ function Test-Url {
     catch { return $false }
 }
 
+Write-Log 'WATCHDOG START'
+
 while ($true) {
-    # 1. MySQL
     if (-not (Test-TcpPort 3307)) {
+        Write-Log 'MySQL down -> starting'
         Start-Process -FilePath $mysqld -ArgumentList @("--defaults-file=$myini", '--port=3307') -WindowStyle Hidden | Out-Null
     }
 
-    # 2. Laravel dev server
     if (-not (Test-Url 'http://127.0.0.1:8000/health' 5)) {
+        Write-Log 'Laravel down -> starting'
         Start-Process -FilePath $php -ArgumentList @('artisan', 'serve', '--host=127.0.0.1', '--port=8000') -WorkingDirectory $root -WindowStyle Hidden | Out-Null
     }
 
-    # 3. localtunnel dengan subdomain tetap (maksimal sekali per 60 detik)
-    if (-not (Test-Url $public 20) -and ((Get-Date) - $lastTunnel).TotalSeconds -gt 60) {
-        Get-CimInstance Win32_Process -Filter "name='node.exe'" | Where-Object { $_.CommandLine -like '*localtunnel*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
-        Start-Process -FilePath 'cmd.exe' -ArgumentList @('/c', "`"$tunnelScript`"") -WindowStyle Hidden | Out-Null
-        $lastTunnel = Get-Date
+    if (-not (Test-Url $public 20)) {
+        if ((Get-Date) - $lastTunnel -gt [timespan]::FromSeconds(60)) {
+            Write-Log 'Tunnel down -> restarting'
+            Get-CimInstance Win32_Process -Filter "name='node.exe'" | Where-Object { $_.CommandLine -like '*localtunnel*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+            Start-Process -FilePath 'cmd.exe' -ArgumentList @('/c', "`"$tunnelScript`"") -WindowStyle Hidden | Out-Null
+            $lastTunnel = Get-Date
+        } else {
+            Write-Log 'Tunnel down -> cooldown'
+        }
+    } else {
+        Write-Log 'All services OK'
     }
 
     Start-Sleep -Seconds 20
