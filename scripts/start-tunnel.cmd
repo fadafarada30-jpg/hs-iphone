@@ -1,2 +1,2 @@
 @echo off
-"C:\Program Files\nodejs\npx.cmd" --yes localtunnel --port 8000 --subdomain hs-iphone
+"C:\laragon\bin\ngrok\ngrok.exe" http 8000 --request-header-add ngrok-skip-browser-warning:true --log=stdout --log-level=info

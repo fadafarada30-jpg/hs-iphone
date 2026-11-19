@@ -2,7 +2,7 @@
 
 Sistem informasi etalase editorial dan konsol manajemen untuk showroom iPhone terkurasi. Dibangun dengan Laravel 12, MySQL/PostgreSQL, dan antarmuka monokrom editorial.
 
-**Demo publik (URL permanen):** https://hs-iphone.loca.lt
+**Demo publik (URL permanen):** https://doorway-ought-brink.ngrok-free.dev
 
 ## Fitur utama
 
@@ -37,13 +37,13 @@ php artisan serve
 
 Aplikasi saat ini dipublikasikan di:
 
-**https://hs-iphone.loca.lt**
+**https://doorway-ought-brink.ngrok-free.dev**
 
-Subdomain `hs-iphone` tetap, jadi tautannya tidak berubah setiap kali tunnel dijalankan ulang.
+Alamat ini adalah *development domain* bawaan akun ngrok gratis, jadi tetap sama setiap tunnel dijalankan ulang. Ngrok jauh lebih cepat daripada localtunnel (TTFB ~0,1–0,6 detik).
 
-Di Windows, script `scripts/watch-public.ps1` bertugas menjaga MySQL, Laravel, dan tunnel tetap hidup. Script ini didaftarkan sebagai scheduled task `HS-iPhone Public Watchdog` yang berjalan saat login. Script `scripts/start-tunnel.cmd` dipakai untuk menjalankan localtunnel dengan subdomain tetap.
+Di Windows, script `scripts/watch-public.ps1` bertugas menjaga MySQL, Laravel, dan tunnel tetap hidup. Script ini didaftarkan sebagai scheduled task `HS-iPhone Public Watchdog` yang berjalan saat login. Script `scripts/start-tunnel.cmd` menjalankan ngrok dengan header `ngrok-skip-browser-warning` agar pengunjung tidak melihat halaman peringatan ngrok.
 
-Jika komputer dimatikan atau internet putus, alamat tetap sama; begitu penjaga berjalan kembali, tunnel akan tersambung kembali ke subdomain yang sama.
+Jika komputer dimatikan atau internet putus, alamat tetap sama; begitu penjaga berjalan kembali, tunnel akan tersambung kembali ke domain yang sama.
 
 ## Deploy ke Railway (opsional)
 

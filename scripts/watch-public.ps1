@@ -6,7 +6,7 @@ $mysqld       = 'C:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysqld.exe'
 $myini        = 'C:\laragon\bin\mysql\mysql-8.4.3-winx64\my.ini'
 $tunnelScript = "$root\scripts\start-tunnel.cmd"
 $log          = "$root\scripts\watch-public.log"
-$public       = 'https://hs-iphone.loca.lt/health'
+$public       = 'https://doorway-ought-brink.ngrok-free.dev/health'
 $lastTunnel   = (Get-Date).AddMinutes(-5)
 
 function Write-Log {
@@ -23,11 +23,13 @@ function Test-TcpPort {
 
 function Test-Url {
     param([string]$Url, [int]$Timeout = 10)
-    try { $r = Invoke-WebRequest $Url -UseBasicParsing -TimeoutSec $Timeout; return ([int]$r.StatusCode -eq 200) }
-    catch { return $false }
+    try {
+        $r = Invoke-WebRequest $Url -UseBasicParsing -TimeoutSec $Timeout -Headers @{ 'ngrok-skip-browser-warning' = 'true' }
+        return ([int]$r.StatusCode -eq 200)
+    } catch { return $false }
 }
 
-Write-Log 'WATCHDOG START'
+Write-Log 'WATCHDOG START (ngrok)'
 
 while ($true) {
     if (-not (Test-TcpPort 3307)) {
@@ -43,7 +45,7 @@ while ($true) {
     if (-not (Test-Url $public 20)) {
         if ((Get-Date) - $lastTunnel -gt [timespan]::FromSeconds(60)) {
             Write-Log 'Tunnel down -> restarting'
-            Get-CimInstance Win32_Process -Filter "name='node.exe'" | Where-Object { $_.CommandLine -like '*localtunnel*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+            Get-CimInstance Win32_Process -Filter "name='ngrok.exe'" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
             Start-Process -FilePath 'cmd.exe' -ArgumentList @('/c', "`"$tunnelScript`"") -WindowStyle Hidden | Out-Null
             $lastTunnel = Get-Date
         } else {
