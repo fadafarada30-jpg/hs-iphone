@@ -1,0 +1,86 @@
+/* Sell flow — editorial, monochrome, sharp surfaces */
+.sell-stage { padding: 72px 0 110px; }
+.sell-layout { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 80px; align-items: start; }
+.sell-intro { position: sticky; top: 110px; }
+.sell-kicker { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--ed-gray); margin: 0 0 24px; }
+.sell-title { font-size: clamp(2.5rem, 4.4vw, 4.5rem); font-weight: 300; line-height: 1.04; letter-spacing: -.03em; margin: 0 0 24px; color: var(--ed-black); }
+.sell-lede { font-size: 16px; line-height: 1.65; color: var(--ed-gray); margin: 0 0 48px; max-width: 34rem; }
+.sell-steps { border-top: 1px solid var(--ed-line); }
+.sell-step { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--ed-line); }
+.sell-step-num { font-size: 11px; letter-spacing: .1em; color: var(--ed-gray); padding-top: 3px; }
+.sell-step h3 { font-size: 14px; font-weight: 500; margin: 0 0 4px; color: var(--ed-black); }
+.sell-step p { font-size: 12px; line-height: 1.6; color: var(--ed-gray); margin: 0; }
+.sell-note { margin-top: 28px; font-size: 11px; line-height: 1.7; color: var(--ed-gray); }
+
+/* Form panel */
+.sell-form { border: 1px solid var(--ed-line); background: #fff; padding: 36px 38px 40px; }
+.sell-form-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 22px; border-bottom: 1px solid var(--ed-line); margin-bottom: 28px; }
+.sell-form-head h2 { font-size: 18px; font-weight: 400; margin: 0; letter-spacing: -.01em; color: var(--ed-black); }
+.sell-form-head span { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--ed-gray); }
+.sell-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 18px; }
+.sell-field.full { grid-column: 1 / -1; }
+.sell-field label { display: block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ed-ink); margin: 0 0 8px; }
+.sell-field input,
+.sell-field select,
+.sell-field textarea {
+    width: 100%; border: 1px solid var(--ed-line); border-radius: 0;
+    background: #fff; color: var(--ed-black);
+    padding: 11px 12px; font-size: 13px; font-family: inherit;
+    transition: border-color .25s ease, background .25s ease;
+}
+.sell-field input:focus,
+.sell-field select:focus,
+.sell-field textarea:focus { outline: none; border-color: var(--ed-black); background: #fcfcfc; }
+.sell-field input::placeholder,
+.sell-field textarea::placeholder { color: #a8a8ad; }
+.sell-field textarea { resize: vertical; min-height: 104px; }
+.sell-error { font-size: 11px; color: #b42318; margin: 6px 0 0; }
+.sell-hint { font-size: 11px; color: var(--ed-gray); margin: 6px 0 0; }
+.sell-divider { height: 1px; background: var(--ed-line); margin: 30px 0; }
+.sell-submit {
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--ed-black); border-radius: 980px;
+    background: var(--ed-black); color: #fff;
+    padding: 13px 30px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    cursor: pointer; transition: background .3s ease, color .3s ease, letter-spacing .6s var(--ed-ease);
+}
+.sell-submit:hover { background: #fff; color: var(--ed-black); letter-spacing: .18em; }
+.sell-back { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ed-gray); }
+.sell-back:hover { color: var(--ed-black); }
+
+/* Submission list */
+.sell-list-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 48px; }
+.sell-list-head .sell-title { margin-bottom: 0; }
+.sell-list { border-top: 1px solid var(--ed-line); }
+.sell-item { display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--ed-line); align-items: start; }
+.sell-item-num { font-size: 12px; letter-spacing: .1em; color: var(--ed-gray); padding-top: 4px; }
+.sell-item h3 { font-size: 18px; font-weight: 400; margin: 0 0 6px; letter-spacing: -.01em; color: var(--ed-black); }
+.sell-item-spec { font-size: 13px; color: var(--ed-gray); margin: 0 0 10px; }
+.sell-item-meta { font-size: 11px; letter-spacing: .04em; color: var(--ed-gray); margin: 0; }
+.sell-status { border: 1px solid var(--ed-line); border-radius: 980px; padding: 6px 12px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ed-ink); background: #fff; white-space: nowrap; }
+.sell-status.is-approved { background: var(--ed-black); color: #fff; border-color: var(--ed-black); }
+.sell-status.is-rejected { border-color: var(--ed-black); color: var(--ed-black); }
+.sell-note-box { grid-column: 2 / -1; margin-top: 14px; border-left: 2px solid var(--ed-black); background: #fafafa; padding: 14px 16px; font-size: 12px; line-height: 1.6; color: var(--ed-ink); }
+.sell-note-box strong { display: block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ed-gray); margin-bottom: 4px; }
+.sell-actions { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 24px; margin-top: 14px; }
+.sell-actions a { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; border-bottom: 1px solid var(--ed-line); padding-bottom: 3px; color: var(--ed-ink); }
+.sell-actions a:hover { border-color: var(--ed-black); color: var(--ed-black); }
+.sell-empty { border: 1px solid var(--ed-line); background: #fff; padding: 70px 30px; text-align: center; }
+.sell-empty-mark { font-size: 11px; letter-spacing: .2em; color: var(--ed-gray); }
+.sell-empty h3 { font-size: 28px; font-weight: 300; margin: 18px 0 10px; color: var(--ed-black); }
+.sell-empty p { font-size: 13px; color: var(--ed-gray); margin: 0 0 26px; }
+
+@media (max-width: 960px) {
+    .sell-layout { grid-template-columns: 1fr; gap: 44px; }
+    .sell-intro { position: static; }
+    .sell-lede { margin-bottom: 32px; }
+}
+@media (max-width: 640px) {
+    .sell-stage { padding: 44px 0 70px; }
+    .sell-form { padding: 26px 20px 30px; }
+    .sell-grid { grid-template-columns: 1fr; }
+    .sell-item { grid-template-columns: 36px 1fr; gap: 12px; }
+    .sell-status { grid-column: 2; justify-self: start; }
+    .sell-note-box, .sell-actions { grid-column: 2; }
+    .sell-list-head { flex-direction: column; align-items: flex-start; }
+}
